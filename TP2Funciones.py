@@ -3,4 +3,9 @@
 # Fecha de última Modificación: XX/XX/2022 XX:XXxm
 # Versión: 3.10.2
 
+# Importación de librerías
+from TP2Menu import *
+
 # Definición de funciones
+def cerrarApp(): # Función del botón "Salir" de la pantalla inicial
+    raiz.destroy()
