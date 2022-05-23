@@ -1,0 +1,4 @@
+AN: Canada, Estados Unidos, Mexico
+AC: Belice, Costa Rica, El Salvador, Guatemala, Honduras, Nicaragua, Panama
+AS: Colombia, Venezuela, Guyana, Surinam, Ecuador, Peru, Brasil, Bolivia, Paraguay, Chile, Uruguay, Argentina
+EC: Alemania, Republica Checa, Suiza, Austria
