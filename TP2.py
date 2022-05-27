@@ -644,6 +644,15 @@ def guiInsertarPart():
             cantidad = int(entradaHobbies.get())
             descripcion = entradaDescripcion.get("1.0","end-1c")
             insertarPart(fechaN, n, ap1, ap2, cantidad, descripcion)
+            pIngresarPart.deiconify()
+            exitoInsPart = Toplevel()
+            exitoInsPart.geometry("450x180")
+            exitoInsPart.config(cursor = "star")
+            Label(exitoInsPart, text = "Se ha ingresado exitosamente", font = ("Helvetica", 15), fg = "Black").place(x = 23, y = 20)
+            Label(exitoInsPart, text = "como un participante.", font = ("Helvetica", 15), fg = "Black").place(x = 23, y = 50)
+            Label(exitoInsPart, text = "¡Muchas gracias!", font = ("Helvetica", 15), fg = "Black").place(x = 23, y = 80)
+            botonRegresar = Button(exitoInsPart, text = "Regresar", padx = 30, pady = 5, font = ("Impact", 12), relief = "raised", fg = "White", bg = "Black", command = lambda: cerrarPantalla(exitoInsPart))
+            botonRegresar.place(x = 300, y = 120)
             return ""
         except:
             pIngresarPart.deiconify()
@@ -747,6 +756,15 @@ def guiInsertarNPart():
             cantidad = int(entradaCantidad.get())
             if cantidad > 9:
                 insertarNPart(cantidad)
+                pIngresarNPart.deiconify()
+                exitoInsNPart = Toplevel()
+                exitoInsNPart.geometry("450x180")
+                exitoInsNPart.config(cursor = "star")
+                Label(exitoInsNPart, text = "Se han ingresado exitosamente", font = ("Helvetica", 15), fg = "Black").place(x = 23, y = 20)
+                Label(exitoInsNPart, text = f"{cantidad} participantes.", font = ("Helvetica", 15), fg = "Black").place(x = 23, y = 50)
+                Label(exitoInsNPart, text = "¡Muchas gracias!", font = ("Helvetica", 15), fg = "Black").place(x = 23, y = 80)
+                botonRegresar = Button(exitoInsNPart, text = "Regresar", padx = 30, pady = 5, font = ("Impact", 12), relief = "raised", fg = "White", bg = "Black", command = lambda: cerrarPantalla(exitoInsNPart))
+                botonRegresar.place(x = 300, y = 120)
                 return ""
             else:
                 pIngresarNPart.deiconify()
@@ -769,6 +787,7 @@ def guiInsertarNPart():
             botonRegresar = Button(errorInsertarNP, text = "Regresar", padx = 30, pady = 5, font = ("Impact", 12), relief = "raised", fg = "White", bg = "Black", command = lambda: cerrarPantalla(errorInsertarNP))
             botonRegresar.place(x = 350, y = 120)
             return ""
+
     def limpiar():
         entradaCantidad.delete(0, END)
         return ""
@@ -795,10 +814,8 @@ def guiEnlazarConAbu():
     pEnlazarConAbu = Toplevel()
     pEnlazarConAbu.geometry("280x180")
     pEnlazarConAbu.config(cursor = "star")
-
     Label(pEnlazarConAbu, text = "Enlace creado", font = ("Impact", 20), fg = "Black").place(x = 23, y = 20)
     Label(pEnlazarConAbu, text = "satisfactoriamente", font = ("Impact", 20), fg = "Black").place(x = 23, y = 50)
-
     botonRegresar = Button(pEnlazarConAbu, text = "Regresar", padx = 30, pady = 5, font = ("Impact", 12), relief = "raised", fg = "White", bg = "Black", command = lambda: cerrarPantalla(pEnlazarConAbu))
     botonRegresar.place(x = 75, y = 115)
 
