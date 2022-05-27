@@ -1,10 +1,13 @@
+# Elaborado por: Juan Ceballos y Esteban Solano
+# Fecha de Creación: 05/05/2022 02:00pm
+# Fecha de última Modificación: 27/05/2022 11:35am
+# Versión: 3.10.2
+
 # Importación de librerías
-from pydoc import describe
 from tkinter import *
 from tkinter.scrolledtext import ScrolledText
 import re
 import random
-from turtle import width
 import smtplib
 
 # Variables globales
@@ -275,7 +278,6 @@ def insertarPart(fechaN, n, ap1, ap2, cantidad, descripcion):
     agregarCorreoE(participante)
     agregarPaisOrigen(participante)
     participante.append((1, ""))
-    #descripcion = input("Añada una descripción: ")
     agregarDescripcion(participante, descripcion)
     agregarAdoptado(participante)
     matrizPart.append(participante)
@@ -390,7 +392,7 @@ def enviarCorreo():
         encabezado = "Prueba de envio de correo"
         mensaje = "Esto es una prueba para una tarea de programacion.\nDisculpe las molestias, ignorar mensaje por favor."
         correo = f"Subject: {encabezado}\n\n{mensaje}"
-        smtp.sendmail("tprogdos@gmail.com", "estebanjs029@gmail.com", correo) # Aqui se ingresa: emisor, receptor, mensaje. Para pruebas cambiar el receptor
+        smtp.sendmail("tprogdos@gmail.com", dirCorreo, correo) # Aqui se ingresa: emisor, receptor, mensaje. Para pruebas cambiar el receptor
     print("El correo se ha enviado satisfactoriamente.")       # a un correo personal
     return ""
 
