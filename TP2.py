@@ -9,6 +9,9 @@ from tkinter.scrolledtext import ScrolledText
 import re
 import random
 import smtplib
+from asyncore import read
+from csv import writer
+import csv
 
 # Variables globales
 matrizPart = []
@@ -156,8 +159,7 @@ def agregarHobbies(pparticipante, cantidad):
     listaHobbies = []
     num = ""
     for i in range(cantidad):
-        for j in range(2):
-            num += str(random.randint(0, 9))
+        num += str(random.randint(1, 25))
         listaHobbies.append("hobbie"+num)
         num = ""
     pparticipante.append(listaHobbies)
@@ -396,94 +398,77 @@ def enviarCorreo():
     print("El correo se ha enviado satisfactoriamente.")       # a un correo personal
     return ""
 
-def mostrarReporte1():
+def crearExcel(nombre, reporte):
+    try:
+        with open(nombre, "w", newline="")as f:
+            for i in reporte:
+                writer=csv.writer(f)
+                writer.writerow(i)
+    except:
+        print("Error al leer archivo")
     return ""
-
+def mostrarReporte1():
+    lista=[]
+    for i in matrizPart:
+        lista.append(i)
+    crearExcel("Reporte1.csv", lista)
+    return ""
 def mostrarReporte2():
+    pruebaen=list(enlazados)
+    listaPruebaTemp=matrizPart.copy()
+    enlazar=[]
+    print(pruebaen)
+    for i in matrizPart:
+        abu=[]
+        for n in pruebaen:
+            if i[2]==n:
+                listaPruebaTemp.remove(i)  
+                abu.append(listaPruebaTemp)
+                enlazar.append(abu)        
+    crearExcel("Reporte2.csv", enlazar)
     return ""
 
 def mostrarReporte3():
+    enlazar=[]
+    for i in matrizPart:
+        abu=[]
+        for n in enlazados:
+            if i[2]==n:
+                abu.append(i[2])
+                abu.append(i[3])
+                enlazar.append(abu)
+    for j in enlazados.values():
+        for m in matrizPart:
+            participante=[]
+            if m[2]==j:
+                participante.append(m[2])
+                participante.append(m[3])
+                enlazar.append(participante)
+    crearExcel("Reporte3.csv", enlazar)
     return ""
 
-def mostrarReporte4():
+def mostrarReporte4(hobbie):
+    enlazar=[]
+    for i in matrizPart:
+        abu=[]
+        if hobbie in i[4]:
+            abu.append(i[4])
+            abu.append(i[1])
+            abu.append(i[3])
+            abu.append(i[7])
+            enlazar.append(abu)
+    crearExcel("Reporte4.csv", enlazar)
     return ""
 
 def mostrarReporte5():
+    enlazar=[]
+    abu=[]
+    for i in matrizPart:
+        if i[8][0]!=1:
+            abu.append(i)
+            enlazar.append(abu)
+        crearExcel("Reporte5.csv", enlazar)
     return ""
-
-def reportes():
-    try:
-        opcion = 0
-        print ("\n***********************************************************")
-        print ("Reportes")
-        print ("***********************************************************")
-        opcion = int(input("1. Mostrar base de datos completa\n2. Lista de Adultos mayores no adoptados\n3. Lista de voluntarios con los adultos mayores enlazados\n4. Participantes y rol según un hobby\n5. Participantes inactivos y su justificación\n6. Regresar\nSeleccione una opción: "))
-        if opcion == 1:
-            print(f"\n{mostrarReporte1()}")
-        elif opcion == 2:
-            print(f"\n{mostrarReporte2()}")
-        elif opcion == 3:
-            print(f"\n{mostrarReporte3()}")
-        elif opcion == 4:
-            print(f"\n{mostrarReporte4()}")
-        elif opcion == 5:
-            print(f"\n{mostrarReporte5()}")
-        elif opcion == 6:
-            return 
-        else:
-            return f"\nDebe ingresar un valor númerico. {reportes()}"
-        return ""
-    except ValueError:
-        print("Debe ingresar valores válidos.")
-
-def menu():
-    """
-    Funcionamiento: De manera repetitiva, muestra el menú al usuario. 
-    Entradas: NA
-    Salidas: Resultado según lo solicitado
-    """
-    try:
-        print ("####################################################################")
-        print ("¡Tarea Programada 2: Adopta un abuelo!")
-        print ("####################################################################")
-        print ("1. Cargar BD de países")
-        print ("2. Insertar participante")
-        print ("3. Insertar n participantes")
-        print ("4. Enlazar con abuelos")
-        print ("5. Dar de baja")
-        print ("6. Escribe una carta a su correo")
-        print ("7. Reportes")
-        print ("8. Salir")
-        opcion = int(input ("Escoja una opción: "))
-        if opcion >=1 and opcion <=8:
-            if opcion == 1:
-                cargarBdPaises() # FUNCIONA
-            elif opcion == 2 :
-                insertarPart() # FUNCIONA
-            elif opcion == 3:
-                insertarNPart() # FUNCIONA
-            elif opcion == 4:
-                enlazarAbuelos() # FUNCIONA
-            elif opcion == 5:
-                darDeBaja() # FUNCIONA
-            elif opcion == 6 :
-                enviarCorreo() # FUNCIONA
-            elif opcion == 7:
-                reportes() # EN PROCESO
-            elif opcion == 8:
-                print("\n¡Gracias por utilizar el sistema!")
-                return
-            else:
-                return
-        else:
-            print ("\nOpción inválida, indique una opción según las opciones indicadas.\n")
-        menu()
-    except ValueError:
-        print("\nOpción inválida, indique una opción según las opciones indicadas.\n")
-        menu()
-"""
-menu()
-"""
 
 #================================================================================================================================================#
 #                                                             PROGRAMA PRINCIPAL
@@ -1030,6 +1015,115 @@ def guiEnviarCorreo():
     botonRegresar = Button(pEnviarCorreo, text = "Regresar", padx = 30, pady = 5, font = ("Impact", 12), relief = "raised", fg = "White", bg = "Black", command = lambda: cerrarPantalla(pEnviarCorreo))
     botonRegresar.place(x = 75, y = 115)
 
+def guiReportes():
+    raiz.deiconify()
+    reportes = Toplevel()
+    reportes.geometry("592x590")
+    reportes.config(cursor = "star")
+    def obtieneHobbieRep():
+        reportes.deiconify()
+        pHobbies = Toplevel()
+        pHobbies.geometry("600x310")
+        pHobbies.config(cursor = "star")
+
+        #Variable global
+        hobbies = []
+
+        # Funcion para obtener el valor de la caja seleccionada
+        def mostrarInfo():
+            for i in range(len(hobbies)):
+                seleccionado=""
+                if hobbies[i].get()>=1:
+                    seleccionado += str(i + 1)
+                    mostrarReporte4(f"hobbie{seleccionado}")
+
+        # Añade un valor para cada opcion
+        for i in range(25):
+            opcion = IntVar()
+            opcion.set(0)
+            hobbies.append(opcion)
+
+        # Las cajas de seleccion, una para cada hobbie
+        Label(pHobbies, text = "Elija los hobbies para los cuales desea un reporte:", font = ("Impact", 18), fg = "Black").place(x = 50, y = 30)
+
+        Checkbutton(pHobbies, text= "Hobbie 1", variable=hobbies[0]).place(x = 50, y = 90)
+
+        Checkbutton(pHobbies, text= "Hobbie 2", variable=hobbies[1]).place(x = 50, y = 120)
+
+        Checkbutton(pHobbies, text= "Hobbie 3", variable=hobbies[2]).place(x = 50, y = 150)
+
+        Checkbutton(pHobbies, text= "Hobbie 4", variable=hobbies[3]).place(x = 50, y = 180)
+
+        Checkbutton(pHobbies, text= "Hobbie 5", variable=hobbies[4]).place(x = 50, y = 210)
+
+        Checkbutton(pHobbies, text= "Hobbie 6", variable=hobbies[5]).place(x = 150, y = 90)
+
+        Checkbutton(pHobbies, text= "Hobbie 7", variable=hobbies[6]).place(x = 150, y = 120)
+
+        Checkbutton(pHobbies, text= "Hobbie 8", variable=hobbies[7]).place(x = 150, y = 150)
+
+        Checkbutton(pHobbies, text= "Hobbie 9", variable=hobbies[8]).place(x = 150, y = 180)
+
+        Checkbutton(pHobbies, text= "Hobbie 10", variable=hobbies[9]).place(x = 150, y = 210)
+
+        Checkbutton(pHobbies, text= "Hobbie 11", variable=hobbies[10]).place(x = 250, y = 90)
+
+        Checkbutton(pHobbies, text= "Hobbie 12", variable=hobbies[11]).place(x = 250, y = 120)
+
+        Checkbutton(pHobbies, text= "Hobbie 13", variable=hobbies[12]).place(x = 250, y = 150)
+
+        Checkbutton(pHobbies, text= "Hobbie 14", variable=hobbies[13]).place(x = 250, y = 180)
+
+        Checkbutton(pHobbies, text= "Hobbie 15", variable=hobbies[14]).place(x = 250, y = 210)
+
+        Checkbutton(pHobbies, text= "Hobbie 16", variable=hobbies[15]).place(x = 350, y = 90)
+
+        Checkbutton(pHobbies, text= "Hobbie 17", variable=hobbies[16]).place(x = 350, y = 120)
+
+        Checkbutton(pHobbies, text= "Hobbie 18", variable=hobbies[17]).place(x = 350, y = 150)
+
+        Checkbutton(pHobbies, text= "Hobbie 19", variable=hobbies[18]).place(x = 350, y = 180)
+
+        Checkbutton(pHobbies, text= "Hobbie 20", variable=hobbies[19]).place(x = 350, y = 210)
+
+        Checkbutton(pHobbies, text= "Hobbie 21", variable=hobbies[20]).place(x = 450, y = 90)
+
+        Checkbutton(pHobbies, text= "Hobbie 22", variable=hobbies[21]).place(x = 450, y = 120)
+
+        Checkbutton(pHobbies, text= "Hobbie 23", variable=hobbies[22]).place(x = 450, y = 150)
+
+        Checkbutton(pHobbies, text= "Hobbie 24", variable=hobbies[23]).place(x = 450, y = 180)
+
+        Checkbutton(pHobbies, text= "Hobbie 25", variable=hobbies[24]).place(x = 450, y = 210)
+
+        # Buton para mostrar el hobbie seleccionado
+        botonAceptar = Button(pHobbies, text="Aceptar", padx = 20, pady = 1, font = ("Impact", 10), relief = "raised", fg = "White", bg = "Black", command=mostrarInfo)
+        botonAceptar.place(x = 450, y = 255)
+
+        botonRegresar = Button(pHobbies, text="Regresar", padx = 20, pady = 1, font = ("Impact", 10), relief = "raised", fg = "White", bg = "Black", command = lambda: cerrarPantalla(pHobbies))
+        botonRegresar.place(x = 330, y = 255)
+
+    Label(reportes, text = "Reportes", font = ("Impact", 25), fg = "Black").place(x = 235, y = 40)
+
+    botonRep1 = Button(reportes, text = "Mostrar la base de datos completa", padx = 102, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black", command = mostrarReporte1)
+    botonRep1.place(x = 50, y = 130)
+
+    botonRep2 = Button(reportes, text = "Lista de adultos mayores no adoptados", padx = 84, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black", command = mostrarReporte2)
+    botonRep2.place(x = 50, y = 200)
+
+    botonRep3 = Button(reportes, text = "Lista de voluntarios con los adultos mayores enlazados", padx = 20, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black", command = mostrarReporte3)
+    botonRep3.place(x = 50, y = 270)
+
+    botonRep4 = Button(reportes, text = "Participantes y rol según su hobby", padx = 103, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black", command = obtieneHobbieRep)
+    botonRep4.place(x = 50, y = 340)
+
+    botonRep5 = Button(reportes, text = "Participantes inactivos y su justificación", padx = 78, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black", command = mostrarReporte5)
+    botonRep5.place(x = 50, y = 410)
+
+    botonRegresar = Button(reportes, text = "Regresar", padx = 205, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black", command = lambda: cerrarPantalla(reportes))
+    botonRegresar.place(x = 50, y = 480)
+    return ""
+
 # Interfaz Menú principal
 Label(raiz, text = "Adoptemos un Adulto Mayor", font = ("Impact", 25), fg = "Black").place(x = 113, y = 50)
 
@@ -1056,7 +1150,7 @@ botonCorreo = Button(raiz, text = "Escribe una carta a su correo", padx = 110, p
 botonCorreo.place(x = 65, y = 500)
 botonCorreo.config(state=DISABLED)
 
-botonReportes = Button(raiz, text = "Reportes", padx = 191, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black")
+botonReportes = Button(raiz, text = "Reportes", padx = 191, pady = 5, font = "Impact", relief = "raised", fg = "White", bg = "Black", command = guiReportes)
 botonReportes.place(x = 65, y = 570)
 botonReportes.config(state=DISABLED)
 
